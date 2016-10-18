@@ -11,9 +11,7 @@ class Card(object):
 		return '{} of {}'.format(self.rank, self.suit)
 
 class Deck(object):
-	'''
-	A deck made of 52 cards.
-	'''
+	#A deck made of 52 cards.
 	suits = 'spades diamonds clubs hearts'.split()
 	ranks = [str(num) for num in range(2,11)] + list('JQKA')
 	values = dict(zip(ranks, [x for x in range(2,11)] + [10,10,10, (1,11)]))
@@ -28,6 +26,9 @@ class Deck(object):
 		return len(self.cards)
 	
 	def shuffle(self):
+		#Pick up (reset) the cards and reshuffle.
+		self.cards = [Card(rank, suit, self.values[rank]) for rank in self.ranks
+										for suit in self.suits]
 		shuffle(self.cards)
 		
 	def dealCard(self):
@@ -37,6 +38,9 @@ class Hand(object):
 	
 	def __init__(self):
 		self.contents = []
+	
+	def __len__(self):
+		return len(self.contents)
 	
 	def __str__(self):
 		return ', '.join([str(x) for x in self.contents])
@@ -58,25 +62,44 @@ class Hand(object):
 					card.value = 1
 			count += card.value
 		return count
-
-
-d = Deck()
-d.shuffle()
-p1 = Hand()
-
-
-p1.hit(d.dealCard())
-p1.hit(d.dealCard())
-print(p1)
-print(p1.getHandValue())
-print(len(d))
-
-p1.hit(d.dealCard())
-print(p1)
-print(p1.getHandValue())
-print(len(d))
-
-p1.hit(d.dealCard())
-print(p1)
-print(p1.getHandValue())
-print(len(d))
+		
+def main(player):
+	print("\nWelcome to the Blackjack Table, {}.".format(player.getName()))
+	while True:
+		bet = float(input("Please place a bet: "))
+		if bet > player.getBankroll():
+			print("Current bankroll = {}. You don't have enough to cover that bet.".format(player.getBankroll()))
+			continue
+		player.decreaseBankroll(bet)
+		deck = Deck()
+		deck.shuffle()
+		playerHand = Hand()
+		playerHand.hit(deck.dealCard)
+		playerHand.hit(deck.dealCard)
+		dealerHand = Hand()
+		dealerHand.hit(deck.dealCard)
+		print("Dealer's up card - {}".format(dealerHand))
+		dealerHand.hit(deck.dealCard)
+		
+		while True:
+			print("Your cards- {}".format(playerHand))
+			print("You have {}".format(playerHand.getHandValue()))
+			playOrStay = input("Would you like to hit(h) or stay(s)? ")
+			if playOrStay == 'h':
+				playerHand.hit(deck.dealCard())
+			elif playOrStay == 's':
+				pass
+			else:
+				print("Not valid input. Type 'h' to hit or 's' to stay.")
+				continue
+			
+		
+		
+		
+	
+	
+	
+	
+	
+	
+	
