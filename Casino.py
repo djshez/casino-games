@@ -1,4 +1,4 @@
-import Blackjack
+import blackjackTable
 
 class Player(object):
 	
@@ -20,3 +20,7 @@ class Player(object):
 		
 	def decreaseBankroll(self, amount):
 		self.bankroll -= amount
+
+if __name__ == '__main__':		
+	russ = Player('Russell', 1000)
+	Blackjack.main(russ)

@@ -1,5 +1,5 @@
-from Blackjack import Player, Deck, Hand
-
+from blackjackTable import Deck, Hand
+from Casino import Player
 #Test Player Class
 def addMoneyToPlayer():
 	p1 = Player(1000)
@@ -30,14 +30,18 @@ def addToHand():
 	return len(h) > 0
 def calculateHandValue():
 	d = Deck()
+	#for item in range(len(d.cards)):
+		#print(d[item], "item=", item)
 	h = Hand()
+	h.hit(d[2])
+	h.hit(d[3])
+	if h.getHandValue() != 4:
+		return False
 	h.hit(d[-1])
-	h.hit(d[13])
-	if h.getHandValue() != 16:
+	if h.getHandValue() != 15:
 		return False
-	h.hit(d[26])
-	if h.getHandValue() != 14:
-		return False
-	h.hit(d[19])
-	return h.getHandValue() == 20
+	h.hit(d[36])
+	print(h.getHandValue())
+	return h.getHandValue() == 15
 
+print(calculateHandValue())
