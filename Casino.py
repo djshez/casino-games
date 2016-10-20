@@ -21,6 +21,52 @@ class Player(object):
 	def decreaseBankroll(self, amount):
 		self.bankroll -= amount
 
-if __name__ == '__main__':		
-	russ = Player('Russell', 1000)
-	Blackjack.main(russ)
+def getHighScore():
+	#fix
+	f = open('highscore.txt', 'r')
+	highScore = f.read().split(':')
+	return "Current High Score = " + highScore[0] + " - $" + highScore[1]
+
+def updateHighScore(name, highScore):
+	'''Check if new score is better than old high
+	score and update the results.'''
+	pass
+	
+
+def setDifficulty(difficulty, name):
+	if difficulty.lower() == 'novice' or difficulty == '3000':
+		return Player(name, 3000)
+	elif difficulty.lower() == 'weekend gambler' or difficulty == '2000':
+		return Player(name, 2000)
+	elif difficulty.lower() == 'pro' or difficulty == '1000':
+		return Player(name, 1000)
+
+def main():
+	print("Welcome to the casino! May the odds be ever in your favor.")
+	name = input("What is your name?")
+	difficulty = input("What type of gambler are you? Novice($3000), Weekend Gambler ($2000), Pro ($1000)? ")
+	player = setDifficulty(difficulty, name)
+	
+	while True:
+		mainChoice = input('''Now, what would you like to do?/n
+						Check high score = 1/n
+						Check current bankroll = 2/n
+						Play Blackjack = 3/n
+						Go home = 4/n''')
+		if mainChoice == '1':
+			print(getHighScore())
+		elif mainChoice == '2':
+			print("Your current bankroll = $" + player.getBankroll())
+		elif mainChoice == '3':
+			blackjackTable.main(player)
+		elif mainChoice == '4':	
+			updateHighScore(player.getName(), player.getBankroll())
+			break
+		else:
+			print(mainChoice, "wasn't one of your options")
+			continue
+	
+	print("Thank you for playing and come again soon!")
+	
+if __name__ == '__main__':	
+	main()
