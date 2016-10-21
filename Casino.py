@@ -22,16 +22,30 @@ class Player(object):
 		self.bankroll -= amount
 
 def getHighScore():
-	#fix
-	f = open('highscore.txt', 'r')
+	try:
+		f = open('highscore.txt', 'r')
+	except:
+		return "No high score yet."
 	highScore = f.read().split(':')
+	f.close()
 	return "Current High Score = " + highScore[0] + " - $" + highScore[1]
 
 def updateHighScore(name, highScore):
-	'''Check if new score is better than old high
-	score and update the results.'''
-	pass
-	
+        '''Check if new score is better than old high
+        score and update the results.'''
+        try:
+                f = open('highscore.txt', 'r+')
+                oldHighScore = f.read().split(':')
+                if int(oldHighScore[1]) < highScore:
+                        f.seek(0)
+                        f.write(name+":"+str(highScore))
+                        f.close()
+                else:
+                        f.close()
+        except IOError:
+                f = open('highscore.txt', 'w+')
+                f.write(name+":"+str(highScore))
+                f.close()
 
 def setDifficulty(difficulty, name):
 	if difficulty.lower() == 'novice' or difficulty == '3000':
