@@ -31,21 +31,21 @@ def getHighScore():
 	return "Current High Score = " + highScore[0] + " - $" + highScore[1]
 
 def updateHighScore(name, highScore):
-        '''Check if new score is better than old high
-        score and update the results.'''
-        try:
-                f = open('highscore.txt', 'r+')
-                oldHighScore = f.read().split(':')
-                if int(oldHighScore[1]) < highScore:
-                        f.seek(0)
-                        f.write(name+":"+str(highScore))
-                        f.close()
-                else:
-                        f.close()
-        except IOError:
-                f = open('highscore.txt', 'w+')
-                f.write(name+":"+str(highScore))
-                f.close()
+	'''Check if new score is better than old high
+	score and update the results.'''
+	try:
+		f = open('highscore.txt', 'r+')
+		oldHighScore = f.read().split(':')
+		if int(oldHighScore[1]) < highScore:
+				f.seek(0)
+				f.write(name+":"+str(highScore))
+				f.close()
+		else:
+				f.close()
+	except IOError:
+		f = open('highscore.txt', 'w+')
+		f.write(name+":"+str(highScore))
+		f.close()
 
 def setDifficulty(difficulty, name):
 	if difficulty.lower() == 'novice' or difficulty == '3000':
@@ -57,20 +57,20 @@ def setDifficulty(difficulty, name):
 
 def main():
 	print("Welcome to the casino! May the odds be ever in your favor.")
-	name = input("What is your name?")
+	name = input("What is your name? ")
 	difficulty = input("What type of gambler are you? Novice($3000), Weekend Gambler ($2000), Pro ($1000)? ")
 	player = setDifficulty(difficulty, name)
 	
 	while True:
-		mainChoice = input('''Now, what would you like to do?/n
-						Check high score = 1/n
-						Check current bankroll = 2/n
-						Play Blackjack = 3/n
-						Go home = 4/n''')
+		mainChoice = input('''Now, what would you like to do?
+				Check high score = 1
+				Check current bankroll = 2
+				Play Blackjack = 3
+				Go home = 4\n''')
 		if mainChoice == '1':
 			print(getHighScore())
 		elif mainChoice == '2':
-			print("Your current bankroll = $" + player.getBankroll())
+			print("Your current bankroll = $" + str(player.getBankroll()))
 		elif mainChoice == '3':
 			blackjackTable.main(player)
 		elif mainChoice == '4':	
