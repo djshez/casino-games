@@ -1,5 +1,7 @@
 from blackjackTable import Deck, Hand
 from Casino import Player
+import videoPoker
+
 #Test Player Class
 def addMoneyToPlayer():
 	p1 = Player(1000)
@@ -30,8 +32,6 @@ def addToHand():
 	return len(h) > 0
 def calculateHandValue():
 	d = Deck()
-	#for item in range(len(d.cards)):
-		#print(d[item], "item=", item)
 	h = Hand()
 	h.hit(d[2])
 	h.hit(d[3])
@@ -44,4 +44,32 @@ def calculateHandValue():
 	print(h.getHandValue())
 	return h.getHandValue() == 15
 
-print(calculateHandValue())
+#test pokerHand.payout()
+def testStraightPayoutAceHigh():
+	d = videoPoker.pokerDeck()
+	h = videoPoker.pokerHand()
+	h.hit(d[51])
+	h.hit(d[39])
+	h.hit(d[40])
+	h.hit(d[32])
+	h.hit(d[47])
+	multiplier = h.payout()
+	if multiplier == videoPoker.payouts['straight']:
+		return True
+	else:
+		return False
+def testStraightPayoutAceLow(): #Need to fix Ace Low!
+	d = videoPoker.pokerDeck()
+	h = videoPoker.pokerHand()
+	h.hit(d[51])
+	h.hit(d[5])
+	h.hit(d[10])
+	h.hit(d[13])
+	h.hit(d[0])
+	print(h)
+	multiplier = h.payout()
+	if multiplier == videoPoker.payouts['straight']:
+		return True
+	else:
+		return False
+

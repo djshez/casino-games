@@ -1,4 +1,5 @@
 import blackjackTable
+import videoPoker
 
 class Player(object):
 	
@@ -63,17 +64,20 @@ def main():
 	
 	while True:
 		mainChoice = input('''Now, what would you like to do?
-				Check high score = 1
-				Check current bankroll = 2
+				Check High Score = 1
+				Check Current Bankroll = 2
 				Play Blackjack = 3
-				Go home = 4\n''')
+				Play Video Poker = 4
+				Go home = 5\n''')
 		if mainChoice == '1':
 			print(getHighScore())
 		elif mainChoice == '2':
 			print("Your current bankroll = $" + str(player.getBankroll()))
 		elif mainChoice == '3':
 			blackjackTable.main(player)
-		elif mainChoice == '4':	
+		elif mainChoice == '4':
+			videoPoker.main(player)
+		elif mainChoice == '5':	
 			updateHighScore(player.getName(), player.getBankroll())
 			break
 		else:

@@ -11,11 +11,15 @@ payouts = {'royalFlush':100,
 			'2pair':2,
 			'pair':1}
 
-class pokerHand(Hand):
+class pokerDeck(Deck):
+	suits = 'spades diamonds clubs hearts'.split()
+	ranks = [str(num) for num in range(2,11)] + list('JQKA')
 	values = dict(zip(ranks, [x for x in range(2,15)]))
 	
+class pokerHand(Hand):
+	
 	def delete(self, cardIndices):
-		for index in cardIndices:
+		for index in sorted(cardIndices, reverse=True):
 			del self.contents[index]
 			
 	def payout(self):
@@ -25,10 +29,13 @@ class pokerHand(Hand):
 		'''
 		suits = defaultdict(int)
 		ranks = defaultdict(int)
+		straightCheck = []
 		for card in self.contents:
 			suits[card.suit] += 1
 			ranks[card.rank] += 1
+			straightCheck.append(card.value)
 		twoPairCheck = Counter(ranks.values())
+		
 		if (5 in suits.values() and
 			'A' in ranks and
 			'K' in ranks and
@@ -37,7 +44,9 @@ class pokerHand(Hand):
 			'10' in ranks):
 			print("WOW! Royal Flush!")
 			return payouts['royalFlush']
-		#[if straightFlush]
+		elif 5 in suits.values() and sorted(straightCheck) == [x for x in range(min(straightCheck), max(straightCheck)+1)]:
+			print("You have a Straight Flush! Nice!")
+			return payouts['straightFlush']
 		elif 4 in ranks.values():
 			print("You have Four of a Kind!")
 			return payouts['4ofakind']
@@ -47,7 +56,9 @@ class pokerHand(Hand):
 		elif 5 in suits.values():
 			print('You have a Flush!')
 			return payouts['flush']
-		#[if straight]
+		elif sorted(straightCheck) == [x for x in range(min(straightCheck), max(straightCheck)+1)]:
+			print('You have a Straight!')
+			return payouts['straight']
 		elif 3 in ranks.values():
 			print("You have a 3 of a kind!")
 			return payouts['3ofakind']
@@ -63,7 +74,7 @@ class pokerHand(Hand):
 	
 def main(player):
 	print("\nWelcome to Video Poker, {}.".format(player.getName()))
-	deck = Deck()
+	deck = pokerDeck()
 	
 	while True:
 		print("Your current bankroll = $", player.getBankroll())
@@ -77,8 +88,8 @@ def main(player):
 		
 		indicesToRemove = []
 		print("""Which card(s) would you like to replace?
-				(Enter card numbers(1-5))
-				Enter blank line when finished""")
+		(Enter card numbers(1-5))
+		Enter blank line when finished""")
 		while True:
 			index = input()
 			if index:
@@ -95,7 +106,7 @@ def main(player):
 			hand.delete(indicesToRemove)
 			for num in range(len(indicesToRemove)):
 				hand.hit(deck.dealCard())
-			
+		print("Your new cards:\n", hand)
 		multiplier = hand.payout()
 		print("You won - $" + str(bet*multiplier))
 		player.increaseBankroll(bet*multiplier)
@@ -106,6 +117,5 @@ def main(player):
 	
 	print("Thanks for playing. Come again!")
 	
-
 if __name__ == '__main__':
 	print("Please run Casino.py")
